@@ -1,8 +1,91 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html, body {
+	height: 100%;
 }
 
-a {
-  color: #00B7FF;
+body {
+	font-family: "Open Sans Condensed:300";
+	color: white;
+	background-color: #222222;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+	position: relative;
+}
+
+#main {
+	width: 75%;
+	margin: auto;
+	flex-grow: 1;
+}
+
+#footer {
+	text-align: center;
+	height: 60px;
+}
+
+/* Stuff for this page */
+
+.list {
+	display: inline-block;
+	top: inherit;
+}
+
+#search, #results {
+	float: left;
+}
+
+textarea {
+	max-width: 100%;
+}
+
+textarea, input {
+	background-color:#fdf5e6;
+	border-radius: 8px;
+	border: none;
+	padding: 8px;
+}
+
+.option {
+	margin: 16px;
+	border-radius: 8px;
+}
+
+.bottom-pad {
+	padding-bottom: 16px;
+}
+
+#register,#login {
+	width: 260px;
+	padding: 30px;
+	margin: auto;
+}
+
+#password-msg {
+	visibility: hidden;
+	width: 240px;
+	margin: 16px auto;
+	padding: 8px;
+}
+
+.centered-button {
+	display: table;
+	margin: 16px auto;
+}
+
+.center {
+	display: table;
+	margin: 0px auto;
+}
+
+.small-pad {
+	margin: 0px;
+	text-align: center;
+}
+
+.ajax {
+	margin: 0;
+	padding: 0;
 }

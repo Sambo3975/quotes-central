@@ -1,6 +1,7 @@
 var express = require('express');
 var dotenv = require('dotenv');
 var path = require('path');
+var async = require('async');
 var router = express.Router();
 
 const bcrypt = require('bcrypt');
@@ -13,9 +14,79 @@ pg.defaults.ssl = true;
 const connectionString = process.env.DATABASE_URL;
 const pool = new pg.Pool({connectionString: connectionString});
 
+function getCategories(callback) {
+	pool.query('SELECT id, name FROM categories ORDER BY id', (err, res) => {
+		if (err)
+			return callback(err, null);
+		
+		callback(null, res.rows);
+	});
+}
+
+function getMedia(callback) {
+	pool.query('SELECT id, name FROM media ORDER BY id', (err, res) => {
+		if (err)
+			return callback(err, null);
+		
+		callback(null, res.rows);
+	});
+}
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+	// Get the current year (for copyright year in the footer)
+	var today = new Date();
+	var year = today.getFullYear();
+	
+	async.parallel(
+		{
+			categories: getCategories,
+			media: getMedia,
+			randomQuote: function(callback) {
+				pool.query('SELECT q.id, q.quote, q.attribution, q.source, q.submissionDate, m.name AS medium, c.name AS category, u.username, u.screenname FROM quotes q, media m, categories c, quote_users u WHERE q.medium_id = m.id AND q.category_id = c.id AND q.user_id = u.id ORDER BY RANDOM() LIMIT 1', (err, res) => {
+					if (err)
+						return callback(err, null);
+					
+					callback(null, res.rows[0]);
+				});
+			}
+		},
+		function(error, results) {
+			if (error)
+				throw error;
+
+			// Get the screen name of the user who submitted the quote
+			// If the screen name is not set, use the username
+			var submitter;
+			if (results.randomQuote.screenname) {
+				submitter = results.randomQuote.screenname;
+			} else {
+				submitter = results.randomQuote.username;
+			}
+			
+			// Format the date properly
+			var date = results.randomQuote.submissiondate;
+			var month = date.toLocaleString("en-us", {
+				month: "long"
+			});
+			var day = date.getDate();
+			var year = date.getFullYear()
+			date = `${month} ${day}, ${year}`;
+			
+			res.render('index', {
+				title:          'Quotes Central',
+				year:           year,
+				categories:     results.categories,
+				media:          results.media,
+				quote:          results.randomQuote.quote,
+				attribution:    results.randomQuote.attribution,
+				source:         results.randomQuote.source,
+				submitter:      submitter,
+				submissionDate: date
+			});
+		}
+	);
 });
 
 /* GET user data */
@@ -82,13 +153,14 @@ function searchQuotes(req, res) {
 	var queryString = 'SELECT q.id, q.quote, q.attribution, q.source, q.submissionDate, m.name AS medium, c.name AS category, u.username, u.screenname FROM quotes q, media m, categories c, quote_users u WHERE q.medium_id = m.id AND q.category_id = c.id AND q.user_id = u.id';
 	
 	for (var i = 0; i < fields.length; ++i) {
-		if (query[fields[i]] !== "") {
-			queryString += " AND (" + fields[i] + " = '" + query[fields[i]] + "'";
+		if (query[fields[i]]) {
+			var value = query[fields[i]].replace("'", "''");
+			queryString += " AND (" + fields[i] + " = '" + value + "'";
 			if (fields[i] === "username")
 				// The user may be searching by username or by screen name, because
 				// the username is displayed on quotes when the screen name is not
 				// given for the user who submitted a quote.
-				queryString += " OR screenname = '" + query[fields[i]] + "'";
+				queryString += " OR screenname = '" + value + "'";
 			
 			queryString += ")"
 		}

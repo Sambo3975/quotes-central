@@ -1,11 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+
+<head>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="/stylesheets/style.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="/scripts/script.js"></script>
+<title>Quotes Central</title>
+</head>
+
+<body>
+<div class="wrapper">
+	<% include ../partials/header %>
+	<div id="main" class="w3-container w3-row">
+		<form id="search" class="w3-container w3-half" action="">
+			<h1>Filter Quotes</h1>
+			<div class="w3-container w3-blue w3-card-4 bottom-pad">
+				<div class="w3-bar">
+					<div class="w3-bar-item">
+						<label for="category"><b>Category:</b></label><br/>
+						<% for (var i = 0; i < categories.length; ++i) { %>
+            <input type="radio" class="w3-radio" name="category_id" value="<%= categories[i].id %>"/> <%= categories[i].name %> <br/>
+            <% } %>
+					</div>
+					
+					<div class="list w3-bar-item">
+						<label for="medium"><b>Medium:</b></label><br/>
+						<% for (var i = 0; i < media.length; ++i) { %>
+            <input type="radio" class="w3-radio" name="medium_id" value="<%= media[i].id %>"/> <%= media[i].name %> <br/>
+            <% } %>
+					</div>
+					
+					<div class="w3-bar-item">
+						<label for="source"><b>Source:</b></label><br/>
+						<input type="text" class="w3-input w3-border-0" name="source" id="source"/><br/>
+						
+						<label for="attribution"><b>Attribution (who said it):</b></label><br/>
+						<input type="text" class="w3-input w3-border-0"  name="attribution" id="attribution"/><br/>
+						
+						<label for="submissionDate"><b>Submission Date:</b></label><br/>
+						<input type="text" class="w3-input w3-border-0"  name="submissionDate" id="submissionDate"/><br/>
+					
+						<label for="username"><b>Submitted By:</b></label><br/>
+						<input type="text" class="w3-input w3-border-0"  name="username" id="username"/><br/>
+					</div>
+				</div>
+				
+				<label for="quote"><b>Quote Contents:</b></label><br/>
+				<textarea name="quote" id="quote-contents" cols="80" rows="5"></textarea><br/>
+				
+				<input class="w3-btn w3-sand" type="button" onclick="runSearch()" value="Search"/>
+        <input class="w3-btn w3-sand" type="reset" value="Reset"/>
+			</div>
+		</form>
+		
+		<div id="results" class="w3-container w3-half">
+			<h1>Quotes</h1>
+			<div id="search-results" class="ajax">
+        <div class="w3-panel w3-leftber w3-sand w3-card-4">
+        	<p class="w3-xlarge w3-serif quote"><%= quote %></p>
+        	<div class="w3-bar">
+        		<p class="w3-left"><%= attribution %>, <i><%= source %></i></p>
+        		<p class="w3-right">Submitted by <%= submitter %> on <%= submissionDate %></p>
+        	</div>
+        </div>
+      </div>
+		</div>
+	</div>
+	<% include ../partials/footer %>
+</div>
+</body>
 </html>
