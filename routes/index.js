@@ -213,17 +213,19 @@ function addQuote(req, res) {
 	var comma = false
 	
 	for (var i = 0; i < addFields.length; ++i) {
+		var value = body[addFields[i]];
 		if (addFields[i] == 'user_id') { // Temporary until user auth is up.
-			body[addFields[i]] = '0';
+			value = '0';
 		}
-		if (body[addFields[i]]) {
+		if (value) {
+			value = value.replace("'","''");
 			if (comma) {
 				cols += ", ";
 				vals += ", ";
 			}
 			comma = true;
 			cols += addFields[i];
-			vals += "'" + body[addFields[i]] + "'";
+			vals += "'" + value + "'";
 		} else {
 			res.send(`Failed to add quote. The ${addFields[i]} field must be set.`);
 			return;
@@ -238,6 +240,8 @@ function addQuote(req, res) {
 	vals += `, '${y}-${m}-${d}')`;
 	
 	queryString = "INSERT INTO quotes" + cols + vals;
+	
+	console.log(queryString);
 	
 	pool.query(queryString, (error, result) => {
 		if (error)
