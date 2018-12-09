@@ -28,7 +28,7 @@ body {
 
 /* Stuff for this page */
 
-.list {
+.list, .inline {
 	display: inline-block;
 	top: inherit;
 }

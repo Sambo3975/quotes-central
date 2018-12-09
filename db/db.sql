@@ -52,7 +52,7 @@ CREATE TABLE quotes (
 	medium_id      INT REFERENCES media(id) NOT NULL,
 	category_id    INT REFERENCES categories(id) NOT NULL,
 	user_id        INT REFERENCES quote_users(id) NOT NULL,
-	submissionDate DATE
+	submissionDate DATE NOT NULL
 );
 
 INSERT INTO quotes (quote, attribution, source, medium_id, category_id, user_id, submissionDate)

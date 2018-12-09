@@ -36,7 +36,6 @@ var strategy = new Auth0Strategy(
 
 passport.use(strategy);
 
-
 app.use(passport.initialize());
 app.use(passport.session());
 

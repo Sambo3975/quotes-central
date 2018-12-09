@@ -89,6 +89,31 @@ router.get('/', function(req, res, next) {
 	);
 });
 
+/* GET the page for adding a quote */
+router.get('/add', function(req, res, next) {
+	// Get the current year (for copyright year in the footer)
+	var today = new Date();
+	var year = today.getFullYear();
+	
+	async.parallel(
+		{
+			categories: getCategories,
+			media: getMedia,
+		},
+		function(error, results) {
+			if (error)
+				throw error;
+			
+			res.render('add', {
+				title:          'Add a Quote',
+				year:           year,
+				categories:     results.categories,
+				media:          results.media,
+			});
+		}
+	);
+});
+
 /* GET user data */
 router.get('/user', getUserData);
 
@@ -177,7 +202,7 @@ function searchQuotes(req, res) {
 /* POST quote */
 router.post('/quotes', addQuote);
 
-const addFields = ['quote', 'source', 'attribution', 'medium_id', 'category_id', 'user_id', 'submissionDate']
+const addFields = ['quote', 'source', 'attribution', 'medium_id', 'category_id', 'user_id']
 
 function addQuote(req, res) {
 	const body = req.body;
@@ -188,7 +213,10 @@ function addQuote(req, res) {
 	var comma = false
 	
 	for (var i = 0; i < addFields.length; ++i) {
-		if (body[addFields[i]] !== "") {
+		if (addFields[i] == 'user_id') { // Temporary until user auth is up.
+			body[addFields[i]] = '0';
+		}
+		if (body[addFields[i]]) {
 			if (comma) {
 				cols += ", ";
 				vals += ", ";
@@ -196,11 +224,18 @@ function addQuote(req, res) {
 			comma = true;
 			cols += addFields[i];
 			vals += "'" + body[addFields[i]] + "'";
+		} else {
+			res.send(`Failed to add quote. The ${addFields[i]} field must be set.`);
+			return;
 		}
 	}
 	
-	cols += ")";
-	vals += ")";
+	cols += ", submissionDate)";
+	var today = new Date();
+	var y = today.getFullYear();
+	var m = today.getMonth() + 1;
+	var d = today.getDate();
+	vals += `, '${y}-${m}-${d}')`;
 	
 	queryString = "INSERT INTO quotes" + cols + vals;
 	
@@ -208,7 +243,7 @@ function addQuote(req, res) {
 		if (error)
 			throw error;
 		
-		res.send("Quote Added");
+		res.send("Quote added")
 	})
 }
 

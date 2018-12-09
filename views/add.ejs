@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+<head>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="/stylesheets/style.css">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="/scripts/add.js"></script>
+<title></title>
+</head>
+
+<body>
+<div class="wrapper">
+	<% include ../partials/header %>
+	<div id="main" class="w3-panel">
+		<form action="quotes" method="POST" id="add">
+			<h1>Add a Quote</h1>
+			<div class="w3-container w3-blue w3-card-4 bottom-pad">
+				<div class="w3-bar">
+					<div class="w3-bar-item">
+						<label for="source"><b>Source:</b></label><br/>
+						<input type="text" class="w3-input w3-border-0" name="source" id="source"/><br/>
+						
+						<label for="attribution"><b>Attribution (who said it):</b></label><br/>
+						<input type="text" class="w3-input w3-border-0"  name="attribution" id="attribution"/><br/>
+					</div>
+					
+					<div class="w3-bar-item">
+						<label for="category"><b>Category:</b></label><br/>
+						<% for (var i = 0; i < categories.length; ++i) { %>
+            <input type="radio" class="w3-radio" name="category_id" value="<%= categories[i].id %>"/> <%= categories[i].name %> <br/>
+            <% } %>
+					</div>
+					
+					<div class="list w3-bar-item">
+						<label for="medium"><b>Medium:</b></label><br/>
+						<% for (var i = 0; i < media.length; ++i) { %>
+            <input type="radio" class="w3-radio" name="medium_id" value="<%= media[i].id %>"/> <%= media[i].name %> <br/>
+            <% } %>
+					</div>
+				</div>
+				
+				<label for="quote"><b>Quote Contents:</b></label><br/>
+				<textarea name="quote" id="quote-contents" cols="80" rows="5"></textarea><br/>
+				
+				<input class="w3-btn w3-sand" type="button" onclick="addQuote()" value="Add"/>
+        <div id="result" class="w3-green inline w3-hide"></div>
+			</div>
+		</form>
+	</div>
+	<% include ../partials/footer %>
+</div>
+</body>
