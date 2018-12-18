@@ -1,3 +1,4 @@
+// Add a quote to the database
 function addQuote() {
 	console.log("Running script")
 	// Collect form data
@@ -30,3 +31,18 @@ function addQuote() {
 		console.log("FAIL");
 	})
 }
+
+$(function() {
+	$("#quote-contents").change(function() {
+		var quote = $("#quote-contents").val();
+		$("#quote").text(quote.length > 0 ? quote : "Type something. What are you wating for?");
+	});
+	$("#source").change(function() {
+		var source = $("#source").val();
+		$("#src").text(source.length > 0 ? source : "Source");
+	});
+	$("#attribution").change(function() {
+		var att = $("#attribution").val();
+		$("#att").text(att.length > 0 ? att : "Attribution");
+	});
+})

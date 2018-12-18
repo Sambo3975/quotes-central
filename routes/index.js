@@ -93,7 +93,12 @@ router.get('/', function(req, res, next) {
 router.get('/add', function(req, res, next) {
 	// Get the current year (for copyright year in the footer)
 	var today = new Date();
+	var month = today.toLocaleString("en-us", {
+		month: "long"
+	});
+	var day = today.getDate();
 	var year = today.getFullYear();
+	today = `${month} ${day}, ${year}`;
 	
 	async.parallel(
 		{
@@ -109,6 +114,7 @@ router.get('/add', function(req, res, next) {
 				year:           year,
 				categories:     results.categories,
 				media:          results.media,
+				today:          today
 			});
 		}
 	);

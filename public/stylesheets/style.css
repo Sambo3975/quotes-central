@@ -5,6 +5,8 @@ html, body {
 body {
 	font-family: "Open Sans Condensed:300";
 	color: white;
+	background-image: url(/images/black-paper.png),
+	url(/images/qc-bg.png);
 	background-color: #222222;
 }
 
@@ -13,6 +15,25 @@ body {
 	flex-direction: column;
 	min-height: 100%;
 	position: relative;
+}
+
+#header-container, #search-form, #add-form, #footer {
+	background-image: url("/images/brushed-alum-dark.png");
+}
+
+.quote-box {
+	background-image: url("/images/rice-paper.png");
+}
+
+#logo {
+	display: block;
+	margin: auto;
+	padding: 8px;
+}
+
+#logo-text {
+	color: #222222;
+	font-family: 'Fira Sans', sans-serif;
 }
 
 #main {
@@ -35,6 +56,10 @@ body {
 
 #search, #results {
 	float: left;
+}
+
+#sub, #att, #date {
+	display: inline-block;
 }
 
 textarea {

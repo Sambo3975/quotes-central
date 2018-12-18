@@ -44,7 +44,7 @@ function runSearch() {
 			date = `${month} ${day}, ${year}`;
 			
 			html += 
-			`<div class="w3-panel w3-leftber w3-sand w3-card-4">
+			`<div class="w3-panel w3-leftbar w3-sand w3-card-4 quote-box">
 				<p class="w3-xlarge w3-serif quote">${data[i].quote}</p>
 				<div class="w3-bar">
 					<p class="w3-left">${data[i].attribution}, <i>${data[i].source}</i></p>

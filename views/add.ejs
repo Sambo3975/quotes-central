@@ -12,10 +12,10 @@
 <body>
 <div class="wrapper">
 	<% include ../partials/header %>
-	<div id="main" class="w3-panel">
-		<form action="quotes" method="POST" id="add">
+	<div id="main" class="w3-panel w3-container w3-row">
+		<form action="quotes" method="POST" id="add" class="w3-half">
 			<h1>Add a Quote</h1>
-			<div class="w3-container w3-blue w3-card-4 bottom-pad">
+			<div class="w3-container w3-blue w3-card-4 bottom-pad" id="add-form">
 				<div class="w3-bar">
 					<div class="w3-bar-item">
 						<label for="source"><b>Source:</b></label><br/>
@@ -47,6 +47,19 @@
         <div id="result" class="w3-green inline w3-hide"></div>
 			</div>
 		</form>
+    
+    <div id="preview" class="w3-container w3-half">
+    	<h1>Preview</h1>
+      <div id="preview-contents">
+        <div class="w3-panel w3-leftbar w3-sand w3-card-4 quote-box">
+        	<p class="w3-xlarge w3-serif quote" id="quote">Type something. What are you waiting for?</p>
+        	<div class="w3-bar">
+        		<div class="w3-left"><p id="att">Attribution</p>, <i id="src">Source</i></div>
+        		<div class="w3-right">Submitted by <p id="sub">JonDoe</p> on <p id="date"><%= today %></p></div>
+        	</div>
+        </div>
+      </div>
+    </div>
 	</div>
 	<% include ../partials/footer %>
 </div>

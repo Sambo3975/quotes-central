@@ -15,7 +15,7 @@
 	<div id="main" class="w3-container w3-row">
 		<form id="search" class="w3-container w3-half" action="">
 			<h1>Filter Quotes</h1>
-			<div class="w3-container w3-blue w3-card-4 bottom-pad">
+			<div class="w3-container w3-blue w3-card-4 bottom-pad" id="search-form">
 				<div class="w3-bar">
 					<div class="w3-bar-item">
 						<label for="category"><b>Category:</b></label><br/>
@@ -57,7 +57,7 @@
 		<div id="results" class="w3-container w3-half">
 			<h1>Quotes</h1>
 			<div id="search-results" class="ajax">
-        <div class="w3-panel w3-leftber w3-sand w3-card-4">
+        <div class="w3-panel w3-leftbar w3-sand w3-card-4 quote-box">
         	<p class="w3-xlarge w3-serif quote"><%= quote %></p>
         	<div class="w3-bar">
         		<p class="w3-left"><%= attribution %>, <i><%= source %></i></p>
