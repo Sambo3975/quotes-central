@@ -176,26 +176,42 @@ function removeUser(req, res) {
 /* GET quotes */
 router.get('/quotes', searchQuotes);
 
-const fields = ['quote', 'attribution', 'medium_id', 'source', 'submissionDate', 'category_id', 'username']
+// The fields that are used for the query
+// true = partial match allowable
+// false = exact match only
+const fields = {
+	'quote': true,
+	'attribution': true,
+	'medium_id': false,
+	'source': true, 
+	'submissionDate': false,
+	'category_id': false, 
+	'username': true
+}
 
 function searchQuotes(req, res) {
 	const query = req.query;
 	
 	var queryString = 'SELECT q.id, q.quote, q.attribution, q.source, q.submissionDate, m.name AS medium, c.name AS category, u.username, u.screenname FROM quotes q, media m, categories c, quote_users u WHERE q.medium_id = m.id AND q.category_id = c.id AND q.user_id = u.id';
 	
-	for (var i = 0; i < fields.length; ++i) {
-		if (query[fields[i]]) {
-			var value = query[fields[i]].replace("'", "''");
-			queryString += " AND (" + fields[i] + " = '" + value + "'";
-			if (fields[i] === "username")
+	// for (var i = 0; i < fields.length; ++i) {
+	Object.keys(fields).forEach(function(key) {
+		if (query[key]) {
+			var value = query[key].replace("'", "''");
+			var partial = fields[key];
+			queryString += " AND (" + key + (partial ? " ILIKE '%" : " = '") + value + (partial ? "%'" : "'");
+			if (key === "username") {
 				// The user may be searching by username or by screen name, because
 				// the username is displayed on quotes when the screen name is not
 				// given for the user who submitted a quote.
-				queryString += " OR screenname = '" + value + "'";
-			
-			queryString += ")"
+				queryString += " OR screenname ILIKE '%" + value + "%'";
+			}
+			queryString += ")";
 		}
-	}
+	//}
+	});
+	
+	console.log(queryString);
 	
 	pool.query(queryString, (error, result) => {
 		if (error)

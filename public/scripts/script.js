@@ -52,7 +52,15 @@ function runSearch() {
 				</div>
 			</div>`;
 			
+		}
+		if (html !== "") {
 			$("#search-results").html(html);
+		} else {
+			$("#search-results").html(
+				`<div class="w3-panel w3-leftbar w3-sand w3-card-4 quote-box">
+					<p class="w3-xlarge w3-serif quote">No results found.</p>
+				</div>`
+			);
 		}
 	}).fail(function() {
 		// prepare failure message
